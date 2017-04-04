@@ -5,10 +5,11 @@ function Contact(first, last) {
   this.addresses = [];
 }
 
-function Address(street, city, state) {
+function Address(street, city, state, addressType) {
   this.street = street;
   this.city = city;
   this.state = state;
+  this.addressType = addressType;
 }
 
 Contact.prototype.fullName = function() {
@@ -16,7 +17,8 @@ Contact.prototype.fullName = function() {
 }
 
 Address.prototype.fullAddress = function() {
-  return this.street + ", " + this.city + ", " + this.state;
+  console.log(this.street, this.city, this.state, this.addressType)
+  return this.addressType + ": " + this.street + ", " + this.city + ", " + this.state;
 }
 
 function resetFields() {
@@ -25,13 +27,16 @@ function resetFields() {
     $("input.new-street").val("");
     $("input.new-city").val("");
     $("input.new-state").val("");
+    $("select.new-type").val("Home");
+    $(".removable").remove();
+
 }
 
 // user interface logic
 $(document).ready(function() {
-  
+
   $("#add-address").click(function() {
-    $("#new-addresses").append('<div class="new-address">' +
+    $("#new-addresses").append('<div class="new-address removable">' +
                                  '<div class="form-group">' +
                                    '<label for="new-street">Street</label>' +
                                    '<input type="text" class="form-control new-street">' +
@@ -44,7 +49,12 @@ $(document).ready(function() {
                                    '<label for="new-state">State</label>' +
                                    '<input type="text" class="form-control new-state">' +
                                  '</div>' +
-                               '</div>');
+                               '</div>' +
+                               '<div>' + '<label for="addressType">Type of Address</label><br>' +
+                               '<select class="form-group" class="new-type">' + '<option>Home</option>' +
+                               '<option>Work</option>' + '<option>Mailing</option>' + '<option>Other</option>' +
+                               '</select>' + '</div>'
+                             );
   });
 
   $("form#new-contact").submit(function(event) {
@@ -55,11 +65,14 @@ $(document).ready(function() {
     var newContact = new Contact(inputtedFirstName, inputtedLastName);
 
     $(".new-address").each(function() {
+      var inputtedType = $(this).find("select.new-type").val();
       var inputtedStreet = $(this).find("input.new-street").val();
       var inputtedCity = $(this).find("input.new-city").val();
       var inputtedState = $(this).find("input.new-state").val();
-      var newAddress = new Address(inputtedStreet, inputtedCity, inputtedState)
-      newContact.addresses.push(newAddress)
+
+      console.log(inputtedType, inputtedStreet,inputtedCity, inputtedState);
+      var newAddress = new Address(inputtedStreet, inputtedCity, inputtedState, inputtedType);
+      newContact.addresses.push(newAddress);
     });
 
     $("ul#contacts").append("<li><span class='contact'>" + newContact.fullName() + "</span></li>");
