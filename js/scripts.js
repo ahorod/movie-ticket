@@ -12,10 +12,19 @@ Ticket.prototype.ticketInfo = function() {
 }//close prototype
 //prototype calculates ticket price
 Ticket.prototype.ticketPrice = function() {
-  console.log(this.age);
-  if (this.age < 12) {
+  if (this.age < 12 || this.age > 54) {
     this.price -=5;
-    console.log(this.price);
+  }
+
+  var thisTime = (parseInt(this.time));
+  if (thisTime > 11 && thisTime < 16) {
+    this.price-=5;
+  }
+  console.log($("select.movieoption").hasClass("old"));
+  console.log($("select.movie option"));
+
+  if ( (this.movie).includes("old")) {
+    this.price -=5;
   }
   return(this.price);
 }//close prototype
